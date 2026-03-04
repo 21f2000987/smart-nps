@@ -308,98 +308,166 @@
         .hidden {
             display: none !important;
         }
+
+        /* Screen reader only content */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
+        /* Improved focus indicators for accessibility */
+        *:focus {
+            outline: 3px solid var(--primary);
+            outline-offset: 2px;
+        }
+
+        button:focus,
+        input:focus,
+        select:focus {
+            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.4);
+        }
+
+        /* Skip to main content link */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--primary);
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            z-index: 100;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
     </style>
 </head>
 <body ontouchstart="">
+    <!-- Skip to main content for screen readers -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <div class="app-container">
-        <div class="header">
-            <h1>🚀 NPS ORBIT</h1>
-            <p>Your Intelligent Retirement Planner</p>
-        </div>
+        <!-- Language Selector & Voice Test -->
+        <div style="position: fixed; top: 10px; right: 10px; z-index: 1000; background: rgba(26, 31, 58, 0.95); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+    <label for="languageSelect" style="font-size: 0.85em; color: var(--text-2); margin-right: 8px;">🌐 Language:</label>
+    <select id="languageSelect" onchange="_changeLang(this.value)" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 4px 8px; border-radius: 4px; cursor: pointer;" aria-label="Select language">
+        <option value="en">English</option>
+        <option value="hi">हिंदी (Hindi)</option>
+        <option value="bn">বাংলা (Bengali)</option>
+        <option value="te">తెలుగు (Telugu)</option>
+        <option value="ta">தமிழ் (Tamil)</option>
+        <option value="mr">मराठी (Marathi)</option>
+    </select>
+</div>
 
-        <div class="tabs">
-            <div class="tab active" data-stage="young">
-                <h3>🌱 Early</h3>
-                <p>20-30</p>
-            </div>
-            <div class="tab" data-stage="mid">
-                <h3>⛰️ Growth</h3>
-                <p>31-45</p>
-            </div>
-            <div class="tab" data-stage="mature">
-                <h3>🌅 Peak</h3>
-                <p>46-60</p>
-            </div>
-        </div>
+        <header class="header" role="banner">
+            <h1 id="mainTitle" aria-label="NPS Orbit - Smart Retirement Planning">🚀 NPS ORBIT</h1>
+            <p id="mainSubtitle">Your Intelligent Retirement Planner</p>
+        </header>
 
-        <div class="form-section">
-            <h2>📊 Your Profile</h2>
-            <div class="form-group">
-                <label>Current Age <span style="color: var(--danger);">*</span></label>
-                <input type="number" id="a1" value="30" min="18" max="65" required placeholder="Enter your current age">
+        <nav class="tabs" role="tablist" aria-label="Life stage selection">
+            <div class="tab active" data-stage="young" role="tab" aria-selected="true" aria-controls="young-panel" tabindex="0">
+                <h3 id="tab-young">🌱 <span class="tab-title">Early</span></h3>
+                <p class="tab-age">20-30</p>
             </div>
-            <div class="form-group">
-                <label>Retirement Age <span style="color: var(--danger);">*</span></label>
-                <input type="number" id="a2" value="60" min="50" max="75" required placeholder="Planned retirement age">
+            <div class="tab" data-stage="mid" role="tab" aria-selected="false" aria-controls="mid-panel" tabindex="-1">
+                <h3 id="tab-mid">⛰️ <span class="tab-title">Growth</span></h3>
+                <p class="tab-age">31-45</p>
             </div>
-            <div class="form-group">
-                <label>Annual Income (₹)</label>
-                <input type="number" id="a3" value="600000" step="50000" min="0" placeholder="Optional: For reference only">
+            <div class="tab" data-stage="mature" role="tab" aria-selected="false" aria-controls="mature-panel" tabindex="-1">
+                <h3 id="tab-mature">🌅 <span class="tab-title">Peak</span></h3>
+                <p class="tab-age">46-60</p>
             </div>
-        </div>
+        </nav>
 
-        <div class="form-section">
-            <h2>💰 Contributions</h2>
+        <main role="main">
+        <section class="form-section" aria-labelledby="profile-heading">
+            <h2 id="profile-heading">📊 <span id="section-profile">Your Profile</span></h2>
             <div class="form-group">
-                <label>NPS Tier</label>
-                <select id="a4">
+                <label for="a1" id="label-age"><span id="field-current-age">Current Age</span> <span style="color: var(--danger);" aria-label="required">*</span></label>
+                <input type="number" id="a1" value="30" min="18" max="65" required aria-required="true" aria-describedby="help-age" placeholder="Enter your current age">
+                <span id="help-age" class="sr-only">Enter your current age between 18 and 65 years</span>
+            </div>
+            <div class="form-group">
+                <label for="a2"><span id="field-retire-age">Retirement Age</span> <span style="color: var(--danger);" aria-label="required">*</span></label>
+                <input type="number" id="a2" value="60" min="50" max="75" required aria-required="true" aria-describedby="help-retire" placeholder="Planned retirement age">
+                <span id="help-retire" class="sr-only">Enter your planned retirement age between 50 and 75 years</span>
+            </div>
+            <div class="form-group">
+                <label for="a3"><span id="field-income">Annual Income</span> (₹)</label>
+                <input type="number" id="a3" value="600000" step="50000" min="0" aria-describedby="help-income" placeholder="Optional: For reference only">
+                <span id="help-income" class="sr-only">Enter your annual income in rupees</span>
+            </div>
+        </section>
+
+        <section class="form-section" aria-labelledby="contrib-heading">
+            <h2 id="contrib-heading">💰 <span id="section-contrib">Contributions</span></h2>
+            <div class="form-group">
+                <label for="a4" id="label-tier"><span id="field-tier">NPS Tier</span></label>
+                <select id="a4" aria-labelledby="label-tier">
                     <option value="tier1">Tier I</option>
                     <option value="tier2">Tier II</option>
-                    <option value="both">Both</option>
+                    <option value="both"><span id="option-both">Both</span></option>
                 </select>
             </div>
             <div class="form-group">
-                <label>Monthly Contribution (₹) <span style="color: var(--danger);">*</span></label>
-                <input type="number" id="a5" value="5000" step="500" min="0" required placeholder="Your monthly contribution">
+                <label for="a5"><span id="field-monthly">Monthly Contribution</span> (₹) <span style="color: var(--danger);" aria-label="required">*</span></label>
+                <input type="number" id="a5" value="5000" step="500" min="0" required aria-required="true" aria-describedby="help-monthly" placeholder="Your monthly contribution">
+                <span id="help-monthly" class="sr-only">Enter your monthly contribution to NPS in rupees</span>
             </div>
             <div class="form-group">
-                <label>Employer Contribution (₹)</label>
-                <input type="number" id="a6" value="5000" step="500" min="0" placeholder="Enter 0 if not applicable">
+                <label for="a6"><span id="field-employer">Employer Contribution</span> (₹)</label>
+                <input type="number" id="a6" value="5000" step="500" min="0" aria-describedby="help-employer" placeholder="Enter 0 if not applicable">
+                <span id="help-employer" class="sr-only">Enter employer contribution if applicable, otherwise enter 0</span>
             </div>
-        </div>
+        </section>
 
-        <div class="form-section">
-            <h2>📈 Strategy</h2>
+        <section class="form-section" aria-labelledby="strategy-heading">
+            <h2 id="strategy-heading">📈 <span id="section-strategy">Strategy</span></h2>
             <div class="form-group">
-                <label>Risk Profile</label>
-                <select id="a7">
-                    <option value="conservative">Conservative (8.5%)</option>
-                    <option value="moderate" selected>Moderate (10%)</option>
-                    <option value="aggressive">Aggressive (12%)</option>
+                <label for="a7"><span id="field-risk">Risk Profile</span></label>
+                <select id="a7" aria-describedby="help-risk">
+                    <option value="conservative"><span id="risk-conservative">Conservative</span> (8.5%)</option>
+                    <option value="moderate" selected><span id="risk-moderate">Moderate</span> (10%)</option>
+                    <option value="aggressive"><span id="risk-aggressive">Aggressive</span> (12%)</option>
                 </select>
+                <span id="help-risk" class="sr-only">Select your risk appetite for investments</span>
             </div>
             <div class="form-group">
-                <label>Current NPS Balance (₹)</label>
-                <input type="number" id="a8" value="0" step="10000" min="0" placeholder="Enter 0 if starting fresh">
+                <label for="a8"><span id="field-balance">Current NPS Balance</span> (₹)</label>
+                <input type="number" id="a8" value="0" step="10000" min="0" aria-describedby="help-balance" placeholder="Enter 0 if starting fresh">
+                <span id="help-balance" class="sr-only">Enter your existing NPS balance, if any</span>
             </div>
             <div class="form-group">
-                <label>Salary Growth (%/year)</label>
-                <input type="number" id="a9" value="7" step="0.5" min="0" max="20" placeholder="Expected annual raise">
+                <label for="a9"><span id="field-growth">Salary Growth</span> (%/year)</label>
+                <input type="number" id="a9" value="7" step="0.5" min="0" max="20" aria-describedby="help-growth" placeholder="Expected annual raise">
+                <span id="help-growth" class="sr-only">Expected annual salary growth percentage</span>
             </div>
             <div class="form-group">
-                <label>Inflation Rate (%/year)</label>
-                <input type="number" id="a10" value="6" step="0.5" min="3" max="10" placeholder="Expected inflation">
+                <label for="a10"><span id="field-inflation">Inflation Rate</span> (%/year)</label>
+                <input type="number" id="a10" value="6" step="0.5" min="3" max="10" aria-describedby="help-inflation" placeholder="Expected inflation">
+                <span id="help-inflation" class="sr-only">Expected annual inflation rate</span>
             </div>
-        </div>
+        </section>
 
-        <button class="btn-calculate" onclick="_c()">🚀 Calculate Your Future</button>
+        <button class="btn-calculate" onclick="_c()" aria-label="Calculate your retirement future">
+            🚀 <span id="btn-calculate">Calculate Your Future</span>
+        </button>
 
-        <div class="loading">
+        <div class="loading" role="status" aria-live="polite" aria-atomic="true">
             <div class="spinner"></div>
             <p>Analyzing 2,000 market scenarios...</p>
         </div>
 
-        <div class="results">
+        <section class="results" id="main-content" role="region" aria-label="Retirement calculation results">
             <div class="card">
                 <h2>📊 Scenario Comparison</h2>
                 <p style="text-align: center; color: var(--text-2); margin-bottom: 20px; font-size: 0.95em;">
@@ -446,7 +514,8 @@
                 <h2>💡 Smart Insights</h2>
                 <div id="r7"></div>
             </div>
-        </div>
+        </section>
+        </main>
     </div>
 
     <script>
@@ -549,6 +618,496 @@
             e.preventDefault();
             return false;
         });
+        
+        // Multi-language translations
+        const _t = {
+            en: {
+                mainTitle: "NPS ORBIT",
+                mainSubtitle: "Your Intelligent Retirement Planner",
+                tabYoung: "Early",
+                tabMid: "Growth",
+                tabMature: "Peak",
+                sectionProfile: "Your Profile",
+                sectionContrib: "Contributions",
+                sectionStrategy: "Strategy",
+                fieldCurrentAge: "Current Age",
+                fieldRetireAge: "Retirement Age",
+                fieldIncome: "Annual Income",
+                fieldTier: "NPS Tier",
+                fieldMonthly: "Monthly Contribution",
+                fieldEmployer: "Employer Contribution",
+                fieldRisk: "Risk Profile",
+                fieldBalance: "Current NPS Balance",
+                fieldGrowth: "Salary Growth",
+                fieldInflation: "Inflation Rate",
+                btnCalculate: "Calculate Your Future",
+                loading: "Analyzing 2,000 market scenarios...",
+                optionBoth: "Both",
+                riskConservative: "Conservative",
+                riskModerate: "Moderate",
+                riskAggressive: "Aggressive"
+            },
+            hi: {
+                mainTitle: "एनपीएस ऑर्बिट",
+                mainSubtitle: "आपका बुद्धिमान सेवानिवृत्ति योजनाकार",
+                tabYoung: "प्रारंभिक",
+                tabMid: "वृद्धि",
+                tabMature: "शिखर",
+                sectionProfile: "आपकी प्रोफ़ाइल",
+                sectionContrib: "योगदान",
+                sectionStrategy: "रणनीति",
+                fieldCurrentAge: "वर्तमान आयु",
+                fieldRetireAge: "सेवानिवृत्ति आयु",
+                fieldIncome: "वार्षिक आय",
+                fieldTier: "एनपीएस टियर",
+                fieldMonthly: "मासिक योगदान",
+                fieldEmployer: "नियोक्ता योगदान",
+                fieldRisk: "जोखिम प्रोफ़ाइल",
+                fieldBalance: "वर्तमान एनपीएस शेष",
+                fieldGrowth: "वेतन वृद्धि",
+                fieldInflation: "मुद्रास्फीति दर",
+                btnCalculate: "अपने भविष्य की गणना करें",
+                loading: "2,000 बाजार परिदृश्यों का विश्लेषण...",
+                optionBoth: "दोनों",
+                riskConservative: "रूढ़िवादी",
+                riskModerate: "मध्यम",
+                riskAggressive: "आक्रामक"
+            },
+            bn: {
+                mainTitle: "এনপিএস অরবিট",
+                mainSubtitle: "আপনার বুদ্ধিমান অবসর পরিকল্পনাকারী",
+                tabYoung: "প্রাথমিক",
+                tabMid: "বৃদ্ধি",
+                tabMature: "শীর্ষ",
+                sectionProfile: "আপনার প্রোফাইল",
+                sectionContrib: "অবদান",
+                sectionStrategy: "কৌশল",
+                fieldCurrentAge: "বর্তমান বয়স",
+                fieldRetireAge: "অবসর বয়স",
+                fieldIncome: "বার্ষিক আয়",
+                fieldTier: "এনপিএস টিয়ার",
+                fieldMonthly: "মাসিক অবদান",
+                fieldEmployer: "নিয়োগকর্তা অবদান",
+                fieldRisk: "ঝুঁকি প্রোফাইল",
+                fieldBalance: "বর্তমান এনপিএস ব্যালেন্স",
+                fieldGrowth: "বেতন বৃদ্ধি",
+                fieldInflation: "মুদ্রাস্ফীতির হার",
+                btnCalculate: "আপনার ভবিষ্যৎ গণনা করুন",
+                loading: "2,000 বাজার দৃশ্যপট বিশ্লেষণ...",
+                optionBoth: "উভয়",
+                riskConservative: "রক্ষণশীল",
+                riskModerate: "মধ্যম",
+                riskAggressive: "আক্রমণাত্মক"
+            },
+            te: {
+                mainTitle: "ఎన్‌పిఎస్ ఆర్బిట్",
+                mainSubtitle: "మీ తెలివైన పదవీ విరమణ ప్రణాళికకర్త",
+                tabYoung: "ప్రారంభ",
+                tabMid: "వృద్ధి",
+                tabMature: "శిఖరం",
+                sectionProfile: "మీ ప్రొఫైల్",
+                sectionContrib: "సహకారం",
+                sectionStrategy: "వ్యూహం",
+                fieldCurrentAge: "ప్రస్తుత వయస్సు",
+                fieldRetireAge: "పదవీ విరమణ వయస్సు",
+                fieldIncome: "వార్షిక ఆదాయం",
+                fieldTier: "ఎన్‌పిఎస్ టైర్",
+                fieldMonthly: "నెలవారీ సహకారం",
+                fieldEmployer: "యజమాని సహకారం",
+                fieldRisk: "రిస్క్ ప్రొఫైల్",
+                fieldBalance: "ప్రస్తుత ఎన్‌పిఎస్ బ్యాలెన్స్",
+                fieldGrowth: "జీతం పెరుగుదల",
+                fieldInflation: "ద్రవ్యోల్బణం రేటు",
+                btnCalculate: "మీ భవిష్యత్తును లెక్కించండి",
+                loading: "2,000 మార్కెట్ దృశ్యాలను విశ్లేషిస్తోంది...",
+                optionBoth: "రెండూ",
+                riskConservative: "సంప్రదాయవాద",
+                riskModerate: "మితమైన",
+                riskAggressive: "దూకుడు"
+            },
+            ta: {
+                mainTitle: "என்பிஎஸ் ஆர்பிட்",
+                mainSubtitle: "உங்கள் அறிவார்ந்த ஓய்வூதிய திட்டமிடுபவர்",
+                tabYoung: "ஆரம்ப",
+                tabMid: "வளர்ச்சி",
+                tabMature: "உச்சம்",
+                sectionProfile: "உங்கள் சுயவிவரம்",
+                sectionContrib: "பங்களிப்புகள்",
+                sectionStrategy: "உத்தி",
+                fieldCurrentAge: "தற்போதைய வயது",
+                fieldRetireAge: "ஓய்வு வயது",
+                fieldIncome: "வருடாந்திர வருமானம்",
+                fieldTier: "என்பிஎஸ் அடுக்கு",
+                fieldMonthly: "மாதாந்திர பங்களிப்பு",
+                fieldEmployer: "முதலாளி பங்களிப்பு",
+                fieldRisk: "இடர் சுயவிவரம்",
+                fieldBalance: "தற்போதைய என்பிஎஸ் இருப்பு",
+                fieldGrowth: "சம்பள வளர்ச்சி",
+                fieldInflation: "பணவீக்க விகிதம்",
+                btnCalculate: "உங்கள் எதிர்காலத்தைக் கணக்கிடுங்கள்",
+                loading: "2,000 சந்தை காட்சிகளை பகுப்பாய்வு செய்கிறது...",
+                optionBoth: "இரண்டும்",
+                riskConservative: "பாதுகாப்பு",
+                riskModerate: "மிதமான",
+                riskAggressive: "தீவிர"
+            },
+            mr: {
+                mainTitle: "एनपीएस ऑर्बिट",
+                mainSubtitle: "तुमचा बुद्धिमान सेवानिवृत्ती नियोजक",
+                tabYoung: "प्रारंभिक",
+                tabMid: "वाढ",
+                tabMature: "शिखर",
+                sectionProfile: "तुमची प्रोफाइल",
+                sectionContrib: "योगदान",
+                sectionStrategy: "धोरण",
+                fieldCurrentAge: "सध्याचे वय",
+                fieldRetireAge: "सेवानिवृत्ती वय",
+                fieldIncome: "वार्षिक उत्पन्न",
+                fieldTier: "एनपीएस टायर",
+                fieldMonthly: "मासिक योगदान",
+                fieldEmployer: "नियोक्ता योगदान",
+                fieldRisk: "जोखीम प्रोफाइल",
+                fieldBalance: "सध्याची एनपीएस शिल्लक",
+                fieldGrowth: "पगार वाढ",
+                fieldInflation: "चलनवाढ दर",
+                btnCalculate: "तुमच्या भविष्याची गणना करा",
+                loading: "2,000 बाजार परिस्थितींचे विश्लेषण...",
+                optionBoth: "दोन्ही",
+                riskConservative: "पुराणमतवादी",
+                riskModerate: "मध्यम",
+                riskAggressive: "आक्रमक"
+            }
+        };
+
+        let _currentLang = 'en';
+
+// Initialize speech synthesis on page load
+window.addEventListener('load', function() {
+    if ('speechSynthesis' in window) {
+        // Load voices
+        speechSynthesis.getVoices();
+        
+        // Some browsers need this event
+        speechSynthesis.onvoiceschanged = function() {
+            speechSynthesis.getVoices();
+        };
+    }
+    
+    // Add voice to inputs after page loads
+    setTimeout(function() {
+        addInputVoiceAnnouncements();
+    }, 1000);
+});
+
+// Voice announces when inputs change
+function addInputVoiceAnnouncements() {
+    // Announce when user leaves number input (blur event)
+    const inputs = document.querySelectorAll('input[type="number"]');
+    inputs.forEach(function(input) {
+        input.addEventListener('blur', function() {
+            const label = document.querySelector('label[for="' + this.id + '"]');
+            if (!label) return;
+            
+            const labelSpan = label.querySelector('span');
+            const labelText = labelSpan ? labelSpan.textContent.trim() : label.textContent.replace('*', '').trim();
+            const value = this.value;
+            
+            if (value && labelText && speechSynthesis) {
+                const utterance = new SpeechSynthesisUtterance(labelText + ': ' + value);
+                const langCodes = {
+                    'en': 'en-IN', 'hi': 'hi-IN', 'bn': 'bn-IN',
+                    'te': 'te-IN', 'ta': 'ta-IN', 'mr': 'mr-IN'
+                };
+                utterance.lang = langCodes[_currentLang] || 'en-IN';
+                utterance.rate = 1.1;
+                utterance.volume = 0.8;
+                
+                // Speak the input value
+                speechSynthesis.speak(utterance);
+            }
+        });
+    });
+    
+    // Announce when dropdown changes
+    const selects = document.querySelectorAll('select');
+    selects.forEach(function(select) {
+        select.addEventListener('change', function() {
+            const label = document.querySelector('label[for="' + this.id + '"]');
+            if (!label) return;
+            
+            const labelSpan = label.querySelector('span');
+            const labelText = labelSpan ? labelSpan.textContent.trim() : label.textContent.trim();
+            const selectedOption = this.options[this.selectedIndex].text;
+            
+            if (labelText && selectedOption && speechSynthesis) {
+                const utterance = new SpeechSynthesisUtterance(labelText + ': ' + selectedOption);
+                const langCodes = {
+                    'en': 'en-IN', 'hi': 'hi-IN', 'bn': 'bn-IN',
+                    'te': 'te-IN', 'ta': 'ta-IN', 'mr': 'mr-IN'
+                };
+                utterance.lang = langCodes[_currentLang] || 'en-IN';
+                utterance.rate = 1.1;
+                utterance.volume = 0.8;
+                
+                // Speak the selected value
+                speechSynthesis.speak(utterance);
+            }
+        });
+    });
+}
+// Voice announces when inputs change
+function addInputVoiceAnnouncements() {
+    // Announce when user leaves number input
+    const inputs = document.querySelectorAll('input[type="number"]');
+    inputs.forEach(input => {
+        input.addEventListener('blur', function() {
+            const label = document.querySelector(`label[for="${this.id}"]`);
+            if (!label) return;
+            
+            const labelSpan = label.querySelector('span');
+            const labelText = labelSpan ? labelSpan.textContent.trim() : label.textContent.replace('*', '').trim();
+            const value = this.value;
+            
+            if (value && labelText) {
+                const utterance = new SpeechSynthesisUtterance(`${labelText}: ${value}`);
+                const langCodes = {
+                    'en': 'en-IN', 'hi': 'hi-IN', 'bn': 'bn-IN',
+                    'te': 'te-IN', 'ta': 'ta-IN', 'mr': 'mr-IN'
+                };
+                utterance.lang = langCodes[_currentLang] || 'en-IN';
+                utterance.rate = 1.1;
+                utterance.volume = 0.8;
+                speechSynthesis.speak(utterance);
+            }
+        });
+    });
+    
+    // Announce when dropdown changes
+    const selects = document.querySelectorAll('select');
+    selects.forEach(select => {
+        select.addEventListener('change', function() {
+            const label = document.querySelector(`label[for="${this.id}"]`);
+            if (!label) return;
+            
+            const labelSpan = label.querySelector('span');
+            const labelText = labelSpan ? labelSpan.textContent.trim() : label.textContent.trim();
+            const selectedOption = this.options[this.selectedIndex].text;
+            
+            if (labelText && selectedOption) {
+                const utterance = new SpeechSynthesisUtterance(`${labelText}: ${selectedOption}`);
+                const langCodes = {
+                    'en': 'en-IN', 'hi': 'hi-IN', 'bn': 'bn-IN',
+                    'te': 'te-IN', 'ta': 'ta-IN', 'mr': 'mr-IN'
+                };
+                utterance.lang = langCodes[_currentLang] || 'en-IN';
+                utterance.rate = 1.1;
+                utterance.volume = 0.8;
+                speechSynthesis.speak(utterance);
+            }
+        });
+    });
+}
+        // Language switching function
+        function _changeLang(lang) {
+            _currentLang = lang;
+            const tr = _t[lang];
+            
+            // Update all translatable elements
+            document.getElementById('mainTitle').textContent = '🚀 ' + tr.mainTitle;
+            document.getElementById('mainSubtitle').textContent = tr.mainSubtitle;
+            
+            // Tabs
+            document.querySelectorAll('.tab-title')[0].textContent = tr.tabYoung;
+            document.querySelectorAll('.tab-title')[1].textContent = tr.tabMid;
+            document.querySelectorAll('.tab-title')[2].textContent = tr.tabMature;
+            
+            // Sections
+            document.getElementById('section-profile').textContent = tr.sectionProfile;
+            document.getElementById('section-contrib').textContent = tr.sectionContrib;
+            document.getElementById('section-strategy').textContent = tr.sectionStrategy;
+            
+            // Fields
+            document.getElementById('field-current-age').textContent = tr.fieldCurrentAge;
+            document.getElementById('field-retire-age').textContent = tr.fieldRetireAge;
+            document.getElementById('field-income').textContent = tr.fieldIncome;
+            document.getElementById('field-tier').textContent = tr.fieldTier;
+            document.getElementById('field-monthly').textContent = tr.fieldMonthly;
+            document.getElementById('field-employer').textContent = tr.fieldEmployer;
+            document.getElementById('field-risk').textContent = tr.fieldRisk;
+            document.getElementById('field-balance').textContent = tr.fieldBalance;
+            document.getElementById('field-growth').textContent = tr.fieldGrowth;
+            document.getElementById('field-inflation').textContent = tr.fieldInflation;
+            
+            // Button
+            document.getElementById('btn-calculate').textContent = tr.btnCalculate;
+            
+            // Loading text
+            const loadingText = document.querySelector('.loading p');
+            if (loadingText) loadingText.textContent = tr.loading;
+            
+            // Options
+            document.getElementById('option-both').textContent = tr.optionBoth;
+            document.getElementById('risk-conservative').textContent = tr.riskConservative;
+            document.getElementById('risk-moderate').textContent = tr.riskModerate;
+            document.getElementById('risk-aggressive').textContent = tr.riskAggressive;
+            
+            // Announce to screen readers
+            _speak(tr.mainTitle + '. ' + tr.mainSubtitle);
+        }
+
+        // Text-to-Speech function (browser native)
+        function _speak(text) {
+            if ('speechSynthesis' in window) {
+                speechSynthesis.cancel(); // Cancel any ongoing speech
+                const utterance = new SpeechSynthesisUtterance(text);
+                
+                // Set language based on current selection
+                const langCodes = {
+                    'en': 'en-IN',
+                    'hi': 'hi-IN',
+                    'bn': 'bn-IN',
+                    'te': 'te-IN',
+                    'ta': 'ta-IN',
+                    'mr': 'mr-IN'
+                };
+                utterance.lang = langCodes[_currentLang] || 'en-IN';
+                utterance.rate = 0.85;
+                utterance.pitch = 1;
+                utterance.volume = 1;
+                
+                // Handle errors
+                utterance.onerror = function(event) {
+                    console.error('Speech error:', event);
+                    alert('Voice feature is not available in your browser. Please try Chrome or Edge.');
+                };
+                
+                speechSynthesis.speak(utterance);
+            } else {
+                alert('⚠️ Text-to-speech is not supported in your browser. Please use Chrome, Edge, or Safari.');
+            }
+        }
+
+        // Add voice button to results (will be called after calculation)
+        function _addVoiceButton() {
+            const resultsDiv = document.querySelector('.results');
+            if (resultsDiv && !document.getElementById('voiceBtn')) {
+                const voiceBtn = document.createElement('button');
+                voiceBtn.id = 'voiceBtn';
+                
+                const buttonText = {
+                    en: '🔊 Hear Full Results',
+                    hi: '🔊 पूर्ण परिणाम सुनें',
+                    bn: '🔊 সম্পূর্ণ ফলাফল শুনুন',
+                    te: '🔊 పూర్తి ఫలితాలను వినండి',
+                    ta: '🔊 முழு முடிவுகளையும் கேளுங்கள்',
+                    mr: '🔊 संपूर्ण निकाल ऐका'
+                };
+                
+                voiceBtn.innerHTML = buttonText[_currentLang] || buttonText.en;
+                voiceBtn.style.cssText = 'width:100%;padding:16px;background:linear-gradient(135deg,#00d4ff,#ff6b35);border:none;border-radius:12px;color:white;font-size:1.1em;font-weight:bold;cursor:pointer;margin:16px 0;box-shadow:0 4px 15px rgba(0,212,255,0.3);transition:transform 0.2s;';
+                voiceBtn.onclick = _speakResults;
+                voiceBtn.onmouseover = function() { this.style.transform = 'scale(1.02)'; };
+                voiceBtn.onmouseout = function() { this.style.transform = 'scale(1)'; };
+                voiceBtn.setAttribute('aria-label', 'Click to hear complete results read aloud');
+                resultsDiv.insertBefore(voiceBtn, resultsDiv.firstChild);
+            }
+        }
+
+        // Speak complete results function
+        function _speakResults() {
+            // Get all the values
+            const existingCorpus = document.querySelector('.scenario.existing .stat-value') ? 
+                document.querySelector('.scenario.existing .stat-value').textContent : '';
+            const existingPension = document.querySelectorAll('.scenario.existing .stat-value')[1] ? 
+                document.querySelectorAll('.scenario.existing .stat-value')[1].textContent : '';
+            
+            const optimizedCorpus = document.querySelector('.scenario.optimized .stat-value') ? 
+                document.querySelector('.scenario.optimized .stat-value').textContent : '';
+            const optimizedPension = document.querySelectorAll('.scenario.optimized .stat-value')[1] ? 
+                document.querySelectorAll('.scenario.optimized .stat-value')[1].textContent : '';
+            
+            // Get gain information
+            const gainText = document.getElementById('r3') ? 
+                document.getElementById('r3').textContent.replace(/\s+/g, ' ').trim() : '';
+            
+            // Build complete message based on language
+            let message = '';
+            
+            if (_currentLang === 'hi') {
+                message = `एनपीएस रिटायरमेंट परिणाम। `;
+                message += `आपका वर्तमान पथ: सेवानिवृत्ति कोष ${existingCorpus}। मासिक पेंशन ${existingPension}। `;
+                message += `आपका अनुकूलित पथ: सेवानिवृत्ति कोष ${optimizedCorpus}। मासिक पेंशन ${optimizedPension}। `;
+                message += `अनुकूलन से लाभ: ${gainText}। `;
+                message += `यह आपकी सेवानिवृत्ति योजना है। धन्यवाद।`;
+            } else if (_currentLang === 'bn') {
+                message = `এনপিএস অবসর ফলাফল। `;
+                message += `আপনার বর্তমান পথ: অবসর তহবিল ${existingCorpus}। মাসিক পেনশন ${existingPension}। `;
+                message += `আপনার অনুকূলিত পথ: অবসর তহবিল ${optimizedCorpus}। মাসিক পেনশন ${optimizedPension}। `;
+                message += `অনুকূলন থেকে লাভ: ${gainText}। `;
+                message += `এটি আপনার অবসর পরিকল্পনা। ধন্যবাদ।`;
+            } else if (_currentLang === 'te') {
+                message = `ఎన్‌పిఎస్ పదవీ విరమణ ఫలితాలు। `;
+                message += `మీ ప్రస్తుత మార్గం: పదవీ విరమణ నిధి ${existingCorpus}। నెలవారీ పెన్షన్ ${existingPension}। `;
+                message += `మీ అనుకూలీకృత మార్గం: పదవీ విరమణ నిధి ${optimizedCorpus}। నెలవారీ పెన్షన్ ${optimizedPension}। `;
+                message += `అనుకూలీకరణ నుండి లాభం: ${gainText}। `;
+                message += `ఇది మీ పదవీ విరమణ ప్రణాళిక। ధన్యవాదాలు।`;
+            } else if (_currentLang === 'ta') {
+                message = `என்பிஎஸ் ஓய்வூதிய முடிவுகள்। `;
+                message += `உங்கள் தற்போதைய பாதை: ஓய்வூதிய நிதி ${existingCorpus}। மாதாந்திர ஓய்வூதியம் ${existingPension}। `;
+                message += `உங்கள் மேம்படுத்தப்பட்ட பாதை: ஓய்வூதிய நிதி ${optimizedCorpus}। மாதாந்திர ஓய்வூதியம் ${optimizedPension}। `;
+                message += `மேம்படுத்துதலால் பலன்: ${gainText}। `;
+                message += `இது உங்கள் ஓய்வூதிய திட்டம். நன்றி।`;
+            } else if (_currentLang === 'mr') {
+                message = `एनपीएस सेवानिवृत्ती निकाल। `;
+                message += `तुमचा सध्याचा मार्ग: सेवानिवृत्ती निधी ${existingCorpus}। मासिक पेन्शन ${existingPension}। `;
+                message += `तुमचा अनुकूल मार्ग: सेवानिवृत्ती निधी ${optimizedCorpus}। मासिक पेन्शन ${optimizedPension}। `;
+                message += `अनुकूलनातून लाभ: ${gainText}। `;
+                message += `ही तुमची सेवानिवृत्ती योजना आहे। धन्यवाद।`;
+            } else {
+                // English
+                message = `NPS Retirement Results. `;
+                message += `Your Current Path: Retirement corpus ${existingCorpus}. Monthly pension ${existingPension}. `;
+                message += `Your Optimized Path: Retirement corpus ${optimizedCorpus}. Monthly pension ${optimizedPension}. `;
+                message += `Gain from optimization: ${gainText}. `;
+                
+                // Read key insights
+                const insights = document.querySelectorAll('#r7 strong');
+                if (insights.length > 0) {
+                    message += `Key insights: `;
+                    insights.forEach((insight, index) => {
+                        if (index < 3) { // Read first 3 insights
+                            message += insight.textContent + '. ';
+                        }
+                    });
+                }
+                
+                message += `This is your retirement plan. Thank you.`;
+            }
+            
+            // Speak the message
+            _speak(message);
+            
+            // Visual feedback
+            const btn = document.getElementById('voiceBtn');
+            if (btn) {
+                btn.style.background = 'linear-gradient(135deg,#00ff88,#00d4ff)';
+                btn.innerHTML = (_currentLang === 'hi' ? '🔊 सुन रहे हैं...' : '🔊 Speaking...');
+                
+                // Reset after speech
+                setTimeout(() => {
+                    btn.style.background = 'linear-gradient(135deg,#00d4ff,#ff6b35)';
+                    const buttonText = {
+                        en: '🔊 Hear Full Results',
+                        hi: '🔊 पूर्ण परिणाम सुनें',
+                        bn: '🔊 সম্পূর্ণ ফলাফল শুনুন',
+                        te: '🔊 పూర్తి ఫలితాలను వినండి',
+                        ta: '🔊 முழு முடிவுகளையும் கேளுங்கள்',
+                        mr: '🔊 संपूर्ण निकाल ऐका'
+                    };
+                    btn.innerHTML = buttonText[_currentLang] || buttonText.en;
+                }, 5000);
+            }
+        }
         
         // Configuration
         const _p = {
@@ -944,6 +1503,18 @@
                 document.querySelector('.loading').style.display = 'none';
                 document.querySelector('.results').style.display = 'block';
                 document.querySelector('.results').scrollIntoView({ behavior: 'smooth' });
+                
+                // Add voice button for accessibility
+                _addVoiceButton();
+                
+                // Announce results to screen readers
+                const ariaLive = document.createElement('div');
+                ariaLive.setAttribute('role', 'status');
+                ariaLive.setAttribute('aria-live', 'polite');
+                ariaLive.className = 'sr-only';
+                ariaLive.textContent = 'Results calculated successfully. Your retirement projections are now available.';
+                document.body.appendChild(ariaLive);
+                setTimeout(() => ariaLive.remove(), 3000);
             } catch (err) {
                 document.querySelector('.loading').style.display = 'none';
                 alert('⚠️ Calculation error. Please check your inputs and try again.\n\n' + err.message);
@@ -951,11 +1522,40 @@
             }
         }
 
-        // Tabs
-        document.querySelectorAll('.tab').forEach(tab => {
+        // Tabs with keyboard navigation
+        document.querySelectorAll('.tab').forEach((tab, index) => {
             tab.addEventListener('click', function() {
-                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab').forEach(t => {
+                    t.classList.remove('active');
+                    t.setAttribute('aria-selected', 'false');
+                    t.setAttribute('tabindex', '-1');
+                });
                 this.classList.add('active');
+                this.setAttribute('aria-selected', 'true');
+                this.setAttribute('tabindex', '0');
+            });
+            
+            // Keyboard navigation for tabs
+            tab.addEventListener('keydown', function(e) {
+                let newIndex = index;
+                if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                    newIndex = (index + 1) % 3;
+                    e.preventDefault();
+                } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                    newIndex = (index - 1 + 3) % 3;
+                    e.preventDefault();
+                } else if (e.key === 'Home') {
+                    newIndex = 0;
+                    e.preventDefault();
+                } else if (e.key === 'End') {
+                    newIndex = 2;
+                    e.preventDefault();
+                }
+                
+                if (newIndex !== index) {
+                    document.querySelectorAll('.tab')[newIndex].click();
+                    document.querySelectorAll('.tab')[newIndex].focus();
+                }
             });
         });
 
